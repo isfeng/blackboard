@@ -1,0 +1,17 @@
+bin/
+data/
+dist/
+logs/
+lib/
+test-result/
+tmp/
+modules/
+eclipse/
+.settings/
+.project
+.classpath
+precompiled/
+.sass-cache/
+teamT.sublime-workspace
+server.pid
+public/javascripts/press

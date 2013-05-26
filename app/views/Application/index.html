@@ -1,0 +1,75 @@
+#{extends 'main.html' /} #{set title:'Home' /}
+<div id="board" style="border: 1px solid black;float:left"></div>
+<div id="ccc" name="ccc" style="border: 1px solid black;width: 200px; height:100px;float:right"></div>
+<button type="button" onclick="clearboard()">擦</button>
+<input type="text" id="ttt" name="ttt"/>
+<button type="button" onclick="say()">說</button>
+
+<script type="text/javascript">
+	var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+	var socket = new WS('@@{Application.WebSocket.draw}');
+	socket.onmessage = function(event) {
+		console.log(event.data);
+		if(event.data=='clear')
+		{
+			blackboard.clear();
+		}
+		else if(event.data.charAt(0)=='M')
+		{
+			freedraw = blackboard.path(event.data);
+			freedraw.attr({
+				'stroke-width' : 3,
+				stroke : 'white'
+			});
+		}
+		else
+		{
+			console.log(event.data);
+			$('ccc').appendText(event.data);
+		}
+	}
+
+	var dragstart = false;
+	var path;
+	var blackboard = Raphael('board', '100%', '100%');
+	var freedraw;
+
+	$('board').addEvent('mousedown', function(e) {
+		dragstart = true;
+		console.log('onmousedown');
+		path = 'M' + e.page.x + ' ' + e.page.y;
+		freedraw = blackboard.path(path);
+		freedraw.attr({
+			'stroke-width' : 3,
+			stroke : 'white'
+		});
+	});
+
+	$('board').addEvent('mouseup', function(e) {
+		console.log('onmouseup');
+		dragstart = false;
+		socket.send(path);
+	});
+
+	$('board').addEvent('mousemove', function(e) {
+		if (dragstart) {
+			console.log('onmousedrag');
+			path += 'L' + e.page.x + ' ' + e.page.y;
+			freedraw.attr({
+				path : path
+			});
+		}
+	});
+
+	function clearboard() {
+		console.log('clear');
+		blackboard.clear();
+		socket.send('clear');
+	}
+	
+	function say()
+	{
+		socket.send('say '+$('ttt').value);
+	}
+	
+</script>

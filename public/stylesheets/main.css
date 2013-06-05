@@ -1,5 +1,12 @@
 #board {
-	width: 1024px;
-	height: 594px;
+	width: 900px;
+	height: 546px;
 	background: url(/public/images/blackboard_chalk_by_raindart-d54a326.jpg ) no-repeat;
+}
+#ccc{
+	margin-top: 5px;
+	border: 1px solid grey;
+	width: 900px;
+	height: 100px;
+	overflow: auto;
 }

@@ -1,9 +1,8 @@
 #{extends 'main.html' /} #{set title:'Home' /}
-<div id="board" style="border: 1px solid black;float:left"></div>
-<div id="ccc" name="ccc" style="border: 1px solid black;width: 200px; height:100px;float:right"></div>
-<button type="button" onclick="clearboard()">擦</button>
+<div id="board"></div>
+<pre id="ccc" name="ccc"></pre>
 <input type="text" id="ttt" name="ttt"/>
-<button type="button" onclick="say()">說</button>
+<button type="button" onclick="say()">Say</button><button type="button" onclick="clearboard()">Clear Board</button>
 
 <script type="text/javascript">
 	var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
@@ -25,7 +24,7 @@
 		else
 		{
 			console.log(event.data);
-			$('ccc').appendText(event.data);
+			$('ccc').appendText(event.data+'\n', 'top');
 		}
 	}
 
@@ -69,7 +68,7 @@
 	
 	function say()
 	{
-		socket.send('say '+$('ttt').value);
+		socket.send($('ttt').value);
 	}
 	
 </script>
